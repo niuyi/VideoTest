@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -38,8 +39,14 @@ public class VideoTestActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				IFileAdapter file = (IFileAdapter) view.getTag();
-				if (file.getNextList() == null)
+				if (file.getNextList() == null){
+					if(file.getText().endsWith(".mp4") || file.getText().endsWith(".3gp")){
+						Intent intent = new Intent(VideoTestActivity.this, VideoPlayerActivity.class);
+						intent.putExtra("VIDEO_URL", file.getPath());
+						VideoTestActivity.this.startActivity(intent);
+					}
 					return;
+				}
 
 				listView.setAdapter(new FileListAdapter(VideoTestActivity.this,
 						file.getNextList()));
@@ -57,9 +64,15 @@ public class VideoTestActivity extends Activity {
 		}
 
 		for (File f : listFiles) {
-			results.add(new RealFileAdapter(f));
+			if(isVideoFile(f) || f.isDirectory()){
+				results.add(new RealFileAdapter(f));
+			}
 		}
 		return results;
+	}
+	
+	public boolean isVideoFile(File f){
+		return f.isFile() && (f.getName().endsWith(".mp4") || f.getName().endsWith(".3gp"));
 	}
 
 	class FileListAdapter extends BaseAdapter {
@@ -94,6 +107,7 @@ public class VideoTestActivity extends Activity {
 			IFileAdapter file = files.get(position);
 			textView.setText(file.getText());
 			textView.setTag(file);
+			textView.setTextSize(20);
 			return textView;
 		}
 	}
