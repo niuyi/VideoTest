@@ -69,7 +69,7 @@ public class FileListAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView textView = new TextView(mContext);
-		textView.setTextSize(20);
+		textView.setTextSize(30);
 
 		File file = mfiles.get(position);
 		textView.setText(getDisplayText(file));
