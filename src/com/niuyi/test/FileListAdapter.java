@@ -4,9 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore.Images;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +22,11 @@ import android.widget.TextView;
 public class FileListAdapter extends BaseAdapter {
 
 	private List<File> mfiles = new ArrayList<File>();
-	private final Context mContext;
 	private final File mCurrent;
 	private LayoutInflater inflater;
+	private HashMap<String, Bitmap> thumbnailCache = new HashMap<String, Bitmap>();
 
 	public FileListAdapter(Context context, File currentDir) {
-		this.mContext = context;
 		this.mCurrent = currentDir;
 		if (!isRootDir(currentDir)) {
 			mfiles.add(currentDir.getParentFile());
@@ -80,12 +84,23 @@ public class FileListAdapter extends BaseAdapter {
 		TextView textView = (TextView) convertView.findViewById(R.id.text);
 
 		File file = mfiles.get(position);
-		iconView.setImageResource(
-				isVideoFile(file) ? 
-						R.drawable.videos_icon : R.drawable.folder_icon);
+		setFileIcon(iconView, file);
 		textView.setText(getDisplayText(file));
 		convertView.setTag(file);
 		return convertView;
+	}
+
+	private void setFileIcon(ImageView iconView, File file) {
+		if(isVideoFile(file)){
+			Bitmap bitmap = thumbnailCache.get(file.getAbsolutePath());
+			if(bitmap == null){
+				bitmap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), Images.Thumbnails.MICRO_KIND);
+				thumbnailCache.put(file.getAbsolutePath(), bitmap);
+			}
+			iconView.setImageBitmap(bitmap);
+		}else{
+			iconView.setImageResource(R.drawable.folder_icon);
+		}
 	}
 
 	private String getDisplayText(File file) {
