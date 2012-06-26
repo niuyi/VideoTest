@@ -7,9 +7,11 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FileListAdapter extends BaseAdapter {
@@ -17,6 +19,7 @@ public class FileListAdapter extends BaseAdapter {
 	private List<File> mfiles = new ArrayList<File>();
 	private final Context mContext;
 	private final File mCurrent;
+	private LayoutInflater inflater;
 
 	public FileListAdapter(Context context, File currentDir) {
 		this.mContext = context;
@@ -25,6 +28,7 @@ public class FileListAdapter extends BaseAdapter {
 			mfiles.add(currentDir.getParentFile());
 		}
 		mfiles.addAll(getFileList(currentDir));
+		inflater = LayoutInflater.from(context);
 	}
 
 	private boolean isRootDir(File currentDir) {
@@ -46,10 +50,11 @@ public class FileListAdapter extends BaseAdapter {
 		return files;
 	}
 
-	public boolean isVideoFileOrDir(File f) {
-		if (f.isDirectory())
-			return true;
+	private boolean isVideoFileOrDir(File f) {
+		return f.isDirectory() || isVideoFile(f);
+	}
 
+	private boolean isVideoFile(File f) {
 		return f.isFile()
 				&& (f.getName().endsWith(".mp4") || f.getName()
 						.endsWith(".3gp"));
@@ -68,46 +73,46 @@ public class FileListAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView textView = new TextView(mContext);
-		textView.setTextSize(30);
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.list_item, null);
+		}
+		ImageView iconView = (ImageView) convertView.findViewById(R.id.icon);
+		TextView textView = (TextView) convertView.findViewById(R.id.text);
 
 		File file = mfiles.get(position);
+		iconView.setImageResource(
+				isVideoFile(file) ? 
+						R.drawable.videos_icon : R.drawable.folder_icon);
 		textView.setText(getDisplayText(file));
-		textView.setTag(file);
-		return textView;
+		convertView.setTag(file);
+		return convertView;
 	}
 
 	private String getDisplayText(File file) {
 		if (isUpToParent(file)) {
 			return "..";
 		}
-
-		if (file.isDirectory()) {
-			return "/" + file.getName();
-		}
-
 		return file.getName();
 	}
 
 	private boolean isUpToParent(File file) {
 		return mfiles.indexOf(file) == 0 && !isRootDir(mCurrent);
 	}
-	
-	class FileComparator implements Comparator<File>{
 
-		
+	class FileComparator implements Comparator<File> {
+
 		public int compare(File lhs, File rhs) {
-			if(lhs.isDirectory() && rhs.isFile()){
+			if (lhs.isDirectory() && rhs.isFile()) {
 				return 1;
 			}
-			
-			if(lhs.isFile() && rhs.isDirectory()){
+
+			if (lhs.isFile() && rhs.isDirectory()) {
 				return -1;
 			}
-				
+
 			return lhs.getName().compareTo(rhs.getName());
 		}
-		
+
 	}
 
 }
