@@ -7,5 +7,11 @@
     <string name="sure_to_exit">确定退出？</string>
     <string name="cancel">取消</string>
     <string name="ok">确定</string>
+    
+    <string name="VideoView_error_text_invalid_progressive_playback">抱歉，该视频不适合在此设备上播放。</string>
+    <string name="VideoView_error_text_unknown">很抱歉，无法播放此视频。</string>
+    <string name="VideoView_error_title">无法播放视频</string>
+    
+    <string name="no_local_video">没有本地视频</string>
 
 </resources>

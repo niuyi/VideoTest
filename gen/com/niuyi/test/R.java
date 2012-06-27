@@ -17,9 +17,10 @@ public final class R {
     }
     public static final class id {
         public static final int icon=0x7f050000;
+        public static final int infoLayout=0x7f050004;
         public static final int listView1=0x7f050002;
-        public static final int seek=0x7f050004;
         public static final int text=0x7f050001;
+        public static final int videoTitle=0x7f050005;
         public static final int videoView1=0x7f050003;
     }
     public static final class layout {
@@ -28,10 +29,14 @@ public final class R {
         public static final int video_player=0x7f030002;
     }
     public static final class string {
+        public static final int VideoView_error_text_invalid_progressive_playback=0x7f040006;
+        public static final int VideoView_error_text_unknown=0x7f040007;
+        public static final int VideoView_error_title=0x7f040008;
         public static final int app_name=0x7f040001;
         public static final int cancel=0x7f040004;
         public static final int exit=0x7f040002;
         public static final int hello=0x7f040000;
+        public static final int no_local_video=0x7f040009;
         public static final int ok=0x7f040005;
         public static final int sure_to_exit=0x7f040003;
     }

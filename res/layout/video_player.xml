@@ -3,18 +3,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <VideoView
+        <com.niuyi.test.MyVideoView
             android:id="@+id/videoView1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center" />
-
-        <SeekBar
-            android:id="@+id/seek"
+        
+        <LinearLayout
+            android:id="@+id/infoLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="100"
-            android:progress="50"
-            android:secondaryProgress="75" />
+            android:background="#50000000" >
+
+            <TextView
+                android:id="@+id/videoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Large Text"
+                android:padding="5dip"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </LinearLayout>
 
     </FrameLayout>
